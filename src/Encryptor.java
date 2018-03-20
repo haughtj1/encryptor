@@ -16,7 +16,6 @@ public class Encryptor {
 		BigInteger p1 = BigInteger.probablePrime(keySize, new Random());
 		BigInteger p2 = BigInteger.probablePrime(keySize, new Random());
 		
-		
 		BigInteger n = p1.multiply(p2); //modulus for the public key and private key
 		
 		BigInteger totient = p1.subtract(BigInteger.ONE);
@@ -34,6 +33,7 @@ public class Encryptor {
 				
 		System.out.println("generated prime number " + p1.toString());
 		System.out.println("generated prime number " + p2.toString());
+		System.out.println("modulus for private and public key is " + n.toString());
 		System.out.println("totient " + totient.toString() + " is " + numBits + " bits long");
 		System.out.println("public key exponent is " + e.toString());
 		System.out.println("private key exponent is " + e.toString());
