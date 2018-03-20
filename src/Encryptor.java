@@ -28,15 +28,14 @@ public class Encryptor {
 		}
 		
 		BigInteger e = BigInteger.probablePrime(numBits - 1, new Random());
-		
-		BigInteger d = null;
+		BigInteger d = e.modInverse(totient);
 				
 		System.out.println("generated prime number " + p1.toString());
 		System.out.println("generated prime number " + p2.toString());
 		System.out.println("modulus for private and public key is " + n.toString());
 		System.out.println("totient " + totient.toString() + " is " + numBits + " bits long");
 		System.out.println("public key exponent is " + e.toString());
-		System.out.println("private key exponent is " + e.toString());
+		System.out.println("private key exponent is " + d.toString());
 	}
 	
 }
