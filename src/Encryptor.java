@@ -1,41 +1,44 @@
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Random;
+import java.security.SecureRandom;
 
 public class Encryptor {
 	public static void main(String args[]) {
-		int keySize = 10;
+		int keySize = 2048;
+
+		// Generate some random primes
+		BigInteger prime1 = new BigInteger(keySize / 2, 100, new SecureRandom());
+		BigInteger prime2 = new BigInteger(keySize / 2, 100, new SecureRandom());
+
+		//Calculate the modulus for the public and private keys (n = pq)
+		BigInteger n = prime1.multiply(prime2); 
 		
-		String original = "Hello World! This is some sensitive information that I don't want you to see.";
-		String encrypted = "";
+		//Calculate the totient (tot = (p - 1)(q - 1))
+		BigInteger totient = prime1.subtract(BigInteger.ONE).multiply(prime2.subtract(BigInteger.ONE));
+
+		//Create the public exponent (used to encrypt)
+		BigInteger e;
+		do e = new BigInteger(totient.bitLength(), new SecureRandom());
+		while (e.compareTo(BigInteger.ONE) <= 0 || e.compareTo(totient) >= 0 || !e.gcd(totient).equals(BigInteger.ONE));
 		
-		System.out.println("Original Message: " + original);
-		
-		System.out.println("Attempting to generate key");
-		
-		BigInteger p1 = BigInteger.probablePrime(keySize, new Random());
-		BigInteger p2 = BigInteger.probablePrime(keySize, new Random());
-		
-		BigInteger n = p1.multiply(p2); //modulus for the public key and private key
-		
-		BigInteger totient = p1.subtract(BigInteger.ONE);
-		totient = totient.multiply(p2.subtract(BigInteger.ONE));
-		
-		//gives us the size to help create public key exponent
-		BigInteger size = BigInteger.TWO;
-		int numBits;
-		for(numBits = 0; size.pow(numBits).compareTo(totient) == -1; numBits++) {
-		}
-		
-		BigInteger e = BigInteger.probablePrime(numBits - 1, new Random());
+		//Create the private exponent (used to decrypt)
 		BigInteger d = e.modInverse(totient);
-				
-		System.out.println("generated prime number " + p1.toString());
-		System.out.println("generated prime number " + p2.toString());
-		System.out.println("modulus for private and public key is " + n.toString());
-		System.out.println("totient " + totient.toString() + " is " + numBits + " bits long");
-		System.out.println("public key exponent is " + e.toString());
-		System.out.println("private key exponent is " + d.toString());
+
+		BigInteger msg = (BigInteger.valueOf(101));
+		System.out.println("Original: " + msg.toString());
+		
+		//Encrypt the message
+		BigInteger enc = msg.modPow(e, n);
+		System.out.println("Encrypted: " + enc.toString());
+		
+		//What the encrypted string looks like
+		byte[] b = enc.toByteArray();
+		String message = new String(b);
+		System.out.println("Attempting to view encrypted string: " + message);
+		
+		//Decrypt the message
+		BigInteger temp = new BigInteger(b);
+		BigInteger dec = temp.modPow(d, n);
+		System.out.println("Decrypted: " + dec.toString());
 	}
 	
 }
