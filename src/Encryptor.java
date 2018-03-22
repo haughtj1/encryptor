@@ -23,22 +23,36 @@ public class Encryptor {
 		//Create the private exponent (used to decrypt)
 		BigInteger d = e.modInverse(totient);
 
-		BigInteger msg = (BigInteger.valueOf(101));
-		System.out.println("Original: " + msg.toString());
+		
+		//BigInteger msg = (BigInteger.valueOf(101));
+		//System.out.println("Original: " + msg.toString());
+		
+		//convert the message to an array of BigIntegers
+		String original = "Hello World!";
+		String words[] = original.split(" ");
+		for(String word : words) {
+			byte wordBytes[] = word.getBytes();
+			for(byte b : wordBytes) {
+				
+			}
+		}
+		
+		
+		
 		
 		//Encrypt the message
-		BigInteger enc = msg.modPow(e, n);
-		System.out.println("Encrypted: " + enc.toString());
+		//BigInteger enc = msg.modPow(e, n);
+		//System.out.println("Encrypted: " + enc.toString());
 		
 		//What the encrypted string looks like
-		byte[] b = enc.toByteArray();
-		String message = new String(b);
-		System.out.println("Attempting to view encrypted string: " + message);
+		//byte[] b = enc.toByteArray();
+		//String message = new String(b);
+		//System.out.println("Attempting to view encrypted string: " + message);
 		
 		//Decrypt the message
-		BigInteger temp = new BigInteger(b);
-		BigInteger dec = temp.modPow(d, n);
-		System.out.println("Decrypted: " + dec.toString());
+		//BigInteger temp = new BigInteger(b);
+		//BigInteger dec = temp.modPow(d, n);
+		//System.out.println("Decrypted: " + dec.toString());
 	}
 	
 }
