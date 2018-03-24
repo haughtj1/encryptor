@@ -22,37 +22,53 @@ public class Encryptor {
 		
 		//Create the private exponent (used to decrypt)
 		BigInteger d = e.modInverse(totient);
-
-		
-		//BigInteger msg = (BigInteger.valueOf(101));
-		//System.out.println("Original: " + msg.toString());
 		
 		//convert the message to an array of BigIntegers
 		String original = "Hello World!";
-		String words[] = original.split(" ");
-		for(String word : words) {
-			byte wordBytes[] = word.getBytes();
-			for(byte b : wordBytes) {
-				
+		String words[] = original.split("\\s+");
+		
+		StringBuilder enc = new StringBuilder();
+		for(int i = 0; i < words.length; i++) {
+			System.out.println(words[i]);
+			byte[] bytes = words[i].getBytes();
+			StringBuilder sb = new StringBuilder();
+			
+			//appends the char values of a word together
+			for(byte b : bytes) {
+				sb.append(String.format("%02X", b));
+			}
+			words[i] = sb.toString();
+			System.out.println(words[i]);
+			
+			BigInteger bigInt = new BigInteger(words[i], 16);
+			System.out.println(bigInt.toString());
+			
+			BigInteger encInt = bigInt.modPow(e, n);
+			if(i < words.length - 1) {
+				enc.append(encInt + ":");
+			} else if(i == words.length - 1) {
+				enc.append(encInt);
 			}
 		}
 		
+		String encMessage = enc.toString();
+		System.out.println(enc.toString());
 		
+		//This would then transmit
+		System.out.println("\nDecrypting Message");
 		
-		
-		//Encrypt the message
-		//BigInteger enc = msg.modPow(e, n);
-		//System.out.println("Encrypted: " + enc.toString());
-		
-		//What the encrypted string looks like
-		//byte[] b = enc.toByteArray();
-		//String message = new String(b);
-		//System.out.println("Attempting to view encrypted string: " + message);
-		
-		//Decrypt the message
-		//BigInteger temp = new BigInteger(b);
-		//BigInteger dec = temp.modPow(d, n);
-		//System.out.println("Decrypted: " + dec.toString());
+		String[] temp = encMessage.split(":");
+		StringBuilder dec = new StringBuilder();
+		for(String s : temp) {
+			BigInteger decWord = new BigInteger(s);
+			decWord = decWord.modPow(d, n);
+			
+			System.out.println(decWord.toString());
+			
+			String decHex = decWord.toString(16); 
+			System.out.println(decHex);
+			
+			//TODO: need to parse the hex and convert to a string
+		}
 	}
-	
 }
