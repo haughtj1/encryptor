@@ -3,7 +3,7 @@ import java.security.SecureRandom;
 
 public class Encryptor {
 	public static void main(String args[]) {
-		int keySize = 2048;
+		int keySize = 32;
 
 		// Generate some random primes
 		BigInteger prime1 = new BigInteger(keySize / 2, 100, new SecureRandom());
@@ -25,50 +25,17 @@ public class Encryptor {
 		
 		//convert the message to an array of BigIntegers
 		String original = "Hello World!";
-		String words[] = original.split("\\s+");
 		
-		StringBuilder enc = new StringBuilder();
-		for(int i = 0; i < words.length; i++) {
-			System.out.println(words[i]);
-			byte[] bytes = words[i].getBytes();
-			StringBuilder sb = new StringBuilder();
-			
-			//appends the char values of a word together
-			for(byte b : bytes) {
-				sb.append(String.format("%02X", b));
-			}
-			words[i] = sb.toString();
-			System.out.println(words[i]);
-			
-			BigInteger bigInt = new BigInteger(words[i], 16);
-			System.out.println(bigInt.toString());
-			
-			BigInteger encInt = bigInt.modPow(e, n);
-			if(i < words.length - 1) {
-				enc.append(encInt + ":");
-			} else if(i == words.length - 1) {
-				enc.append(encInt);
-			}
-		}
+		BigInteger enc = new BigInteger(original.getBytes());
+		System.out.println("Original: " + enc.toString());
 		
-		String encMessage = enc.toString();
-		System.out.println(enc.toString());
+		enc = enc.modPow(e, n);
 		
-		//This would then transmit
-		System.out.println("\nDecrypting Message");
+		BigInteger dec = enc;
+		dec = dec.modPow(d, n);
+		System.out.println("Result: " + dec.toString());
 		
-		String[] temp = encMessage.split(":");
-		StringBuilder dec = new StringBuilder();
-		for(String s : temp) {
-			BigInteger decWord = new BigInteger(s);
-			decWord = decWord.modPow(d, n);
-			
-			System.out.println(decWord.toString());
-			
-			String decHex = decWord.toString(16); 
-			System.out.println(decHex);
-			
-			//TODO: need to parse the hex and convert to a string
-		}
+		//String message = new String(enc.toByteArray());
+		//System.out.println(message);
 	}
 }
