@@ -3,7 +3,7 @@ import java.security.SecureRandom;
 
 public class Encryptor {
 	public static void main(String args[]) {
-		int keySize = 32;
+		int keySize = 2048;
 
 		// Generate some random primes
 		BigInteger prime1 = new BigInteger(keySize / 2, 100, new SecureRandom());
@@ -27,15 +27,18 @@ public class Encryptor {
 		String original = "Hello World!";
 		
 		BigInteger enc = new BigInteger(original.getBytes());
-		System.out.println("Original: " + enc.toString());
+		System.out.println("Original: \t" + enc.toString());
+		
+		String originalString = new String(enc.toByteArray());
+		System.out.println(originalString);
 		
 		enc = enc.modPow(e, n);
 		
 		BigInteger dec = enc;
 		dec = dec.modPow(d, n);
-		System.out.println("Result: " + dec.toString());
+		System.out.println("Result: \t\t" + dec.toString());
 		
-		//String message = new String(enc.toByteArray());
-		//System.out.println(message);
+		String message = new String(enc.toByteArray());
+		System.out.println(message);
 	}
 }
