@@ -38,7 +38,7 @@ public class Encryptor {
 		dec = dec.modPow(d, n);
 		System.out.println("Result: \t\t" + dec.toString());
 		
-		String message = new String(enc.toByteArray());
+		String message = new String(dec.toByteArray());
 		System.out.println(message);
 	}
 }
